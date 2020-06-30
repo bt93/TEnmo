@@ -29,7 +29,11 @@ namespace TenmoServer.DAO
                 cmd.Parameters.AddWithValue("@user_id", id);
 
                 SqlDataReader rdr = cmd.ExecuteReader();
-                account.Balance = Convert.ToDecimal(rdr["balance"]);
+                while (rdr.Read())
+                {
+                    account.Balance = Convert.ToDecimal(rdr["balance"]);
+                }
+                
 
                 return account;
             }
