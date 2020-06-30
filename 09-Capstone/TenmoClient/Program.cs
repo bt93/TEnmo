@@ -80,9 +80,9 @@ namespace TenmoClient
                 Console.WriteLine("Welcome to TEnmo! Please make a selection: ");
                 Console.WriteLine("1: View your current balance");
                 Console.WriteLine("2: View your past transfers");
-                Console.WriteLine("3: View your pending requests");
+                Console.WriteLine("3: View your pending requests"); //Bonus
                 Console.WriteLine("4: Send TE bucks");
-                Console.WriteLine("5: Request TE bucks");
+                Console.WriteLine("5: Request TE bucks"); //Bonus
                 Console.WriteLine("6: Log in as different user");
                 Console.WriteLine("0: Exit");
                 Console.WriteLine("---------");

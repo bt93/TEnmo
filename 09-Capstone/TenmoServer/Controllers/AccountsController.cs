@@ -11,11 +11,11 @@ namespace TenmoServer.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class AccountController : ControllerBase
+    public class AccountsController : ControllerBase
     {
         private IAccountDAO accountSqlDAO;
         private ITransferDAO transferDAO;
-        public AccountController(IAccountDAO accountDAO, ITransferDAO transferDAO)
+        public AccountsController(IAccountDAO accountDAO, ITransferDAO transferDAO)
         {
             this.accountSqlDAO = accountDAO;
             this.transferDAO = transferDAO;
@@ -40,6 +40,17 @@ namespace TenmoServer.Controllers
             }
 
             return transfers;
+        }
+        [HttpGet]
+        public ActionResult<List<ReturnUser>> GetUsersForTransfer()
+        {
+            List<ReturnUser> users = transferDAO.GetUsersForTransfer();
+
+            if (users == null)
+            {
+                return NotFound();
+            }
+            return users;
         }
     }
 }

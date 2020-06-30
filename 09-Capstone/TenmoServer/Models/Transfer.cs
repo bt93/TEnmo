@@ -18,11 +18,12 @@ namespace TenmoServer.Models
     }
     public class Transfer
     {
+        //TODO: Change user back to int 
         public int TransferId { get; set; }
         public TransferType TransferType { get; set; }
         public TransferStatus TransferStatus { get; set; }
-        public int AccountFrom { get; set; }
-        public int AccountTo { get; set; }
+        public ReturnUser AccountFrom { get; set; }
+        public ReturnUser AccountTo { get; set; }
         public decimal Amount { get; set; }
     }
 }

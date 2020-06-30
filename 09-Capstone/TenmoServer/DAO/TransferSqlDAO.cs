@@ -37,8 +37,10 @@ namespace TenmoServer.DAO
                     transfer.TransferId = Convert.ToInt32(rdr["transfer_id"]);
                     transfer.TransferType = (TransferType)Convert.ToInt32(rdr["transfer_type_id"]);
                     transfer.TransferStatus = (TransferStatus)Convert.ToInt32(rdr["transfer_status_id"]);
-                    transfer.AccountFrom = Convert.ToInt32(rdr["account_from"]);
-                    transfer.AccountTo = Convert.ToInt32(rdr["account_to"]);
+                    //transfer.AccountFrom = )Convert.ToInt32(rdr["account_from"]);
+                    //transfer.AccountTo = Convert.ToInt32(rdr["account_to"]);
+                    transfer.AccountFrom = GetUserById(Convert.ToInt32(rdr["account_from"]));
+                    transfer.AccountTo = GetUserById(Convert.ToInt32(rdr["account_to"]));
                     transfer.Amount = Convert.ToDecimal(rdr["amount"]);
 
                     transfers.Add(transfer);
@@ -47,9 +49,9 @@ namespace TenmoServer.DAO
             }
         }
 
-        public List<User> GetUsersForTransfer()
+        public List<ReturnUser> GetUsersForTransfer()
         {
-            List<User> allUsers = new List<User>();
+            List<ReturnUser> allUsers = new List<ReturnUser>();
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();
@@ -62,7 +64,7 @@ namespace TenmoServer.DAO
                 while (rdr.Read())
                 {
 
-                    User user = new User();
+                    ReturnUser user = new ReturnUser();
                     user.UserId = Convert.ToInt32(rdr["user_id"]);
                     user.Username = Convert.ToString(rdr["username"]);
                     allUsers.Add(user);
@@ -114,6 +116,29 @@ namespace TenmoServer.DAO
                 cmd.ExecuteNonQuery();
             }
             return transfer;
+        }
+
+        public ReturnUser GetUserById(int id)
+        {
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                ReturnUser user = new ReturnUser();
+                conn.Open();
+
+                string sqlQuery = @"SELECT * from users where user_id = @userId";
+                SqlCommand cmd = new SqlCommand(sqlQuery, conn);
+                cmd.Parameters.AddWithValue("@userid", id);
+                SqlDataReader rdr = cmd.ExecuteReader();
+
+                while (rdr.Read())
+                {
+                    user = new ReturnUser();
+
+                    user.UserId = Convert.ToInt32(rdr["user_id"]);
+                    user.Username = Convert.ToString(rdr["username"]);
+                }
+                return user;
+            }
         }
     }
 }
