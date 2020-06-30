@@ -16,7 +16,7 @@ namespace TenmoServer.DAO
             this.connectionString = dbconnectionString;
         }
 
-        public decimal GetBalance(int id)
+        public Account GetBalance(int id)
         {
             Account account = new Account();
 
@@ -31,7 +31,7 @@ namespace TenmoServer.DAO
                 SqlDataReader rdr = cmd.ExecuteReader();
                 account.Balance = Convert.ToDecimal(rdr["balance"]);
 
-                return account.Balance;
+                return account;
             }
         }
     }
