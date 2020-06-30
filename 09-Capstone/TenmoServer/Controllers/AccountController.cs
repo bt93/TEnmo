@@ -14,9 +14,11 @@ namespace TenmoServer.Controllers
     public class AccountController : ControllerBase
     {
         private IAccountDAO accountSqlDAO;
-        public AccountController(IAccountDAO accountDAO)
+        private ITransferDAO transferDAO;
+        public AccountController(IAccountDAO accountDAO, ITransferDAO transferDAO)
         {
             this.accountSqlDAO = accountDAO;
+            this.transferDAO = transferDAO;
         }
         [HttpGet("{id}")]
         public ActionResult<decimal> GetBalance(int id)
@@ -27,6 +29,17 @@ namespace TenmoServer.Controllers
             
         }
 
+        [HttpGet("transfers/{id}")]
+        public ActionResult<List<Transfer>> GetUserTransfers(int id)
+        {
+            List<Transfer> transfers = transferDAO.GetUserTransfers(id);
 
+            if (transfers == null)
+            {
+                return NotFound();
+            }
+
+            return transfers;
+        }
     }
 }

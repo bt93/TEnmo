@@ -8,7 +8,7 @@ using static TenmoServer.Models.Transfer;
 
 namespace TenmoServer.DAO
 {
-    public class TransferSqlDAO
+    public class TransferSqlDAO : ITransferDAO
     {
         private string connectionString;
 
@@ -24,7 +24,7 @@ namespace TenmoServer.DAO
             {
                 conn.Open();
 
-                string sqlCommand = @"SELECT * FROM transfers WHERE account_from = @id AND account_to = @id";
+                string sqlCommand = @"SELECT * FROM transfers WHERE account_from = @id OR account_to = @id";
                 SqlCommand cmd = new SqlCommand(sqlCommand, conn);
                 cmd.Parameters.AddWithValue("@id", id);
 
@@ -39,7 +39,7 @@ namespace TenmoServer.DAO
                     transfer.TransferStatus = (TransferStatus)Convert.ToInt32(rdr["transfer_status_id"]);
                     transfer.AccountFrom = Convert.ToInt32(rdr["account_from"]);
                     transfer.AccountTo = Convert.ToInt32(rdr["account_to"]);
-                    transfer.Amount = Convert.ToDecimal(rdr["ammount"]);
+                    transfer.Amount = Convert.ToDecimal(rdr["amount"]);
 
                     transfers.Add(transfer);
                 }
@@ -67,7 +67,7 @@ namespace TenmoServer.DAO
                     user.Username = Convert.ToString(rdr["username"]);
                     allUsers.Add(user);
                 }
-                
+
             }
             return allUsers;
         }
@@ -90,7 +90,7 @@ namespace TenmoServer.DAO
                 cmd.Parameters.AddWithValue("@toUser", toUser.UserId);
                 cmd.Parameters.AddWithValue("@toUserBalance", toUser.Balance);
                 cmd.ExecuteNonQuery();
-                
+
 
             }
         }
