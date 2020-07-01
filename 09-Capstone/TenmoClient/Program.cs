@@ -106,7 +106,11 @@ namespace TenmoClient
                 else if (menuSelection == 2)
                 {
                     // View your past transfers
-
+                    List<Transfer> transfers = apiService.GetTransfers();
+                    foreach(Transfer transfer in transfers)
+                    {
+                        Console.WriteLine(transfer); 
+                    }
                 }
                 else if (menuSelection == 3)
                 {

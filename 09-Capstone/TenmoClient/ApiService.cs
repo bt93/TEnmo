@@ -26,5 +26,13 @@ namespace TenmoClient
 
             return response.Data;
         }
+
+        public List<Transfer> GetTransfers()
+        {
+            RestRequest request = new RestRequest($"{API_URL}accounts/transfers");
+            IRestResponse<List<Transfer>> response = client.Get<List<Transfer>>(request);
+
+            return response.Data;
+        }
     }
 }
