@@ -69,6 +69,7 @@ namespace TenmoServer.Controllers
 
             return transfers;
         }
+        // TODO: User can access other peoples tranfers
         [HttpGet("transfers/{id}")]
         public ActionResult<Transfer> GetTransferId(int id)
         {

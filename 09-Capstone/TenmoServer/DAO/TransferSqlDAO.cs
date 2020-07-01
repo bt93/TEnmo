@@ -23,6 +23,7 @@ namespace TenmoServer.DAO
             using(SqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();
+
                 string sqlQuery = @"SELECT * FROM transfers where transfer_id = @transferId";
                 SqlCommand cmd = new SqlCommand(sqlQuery, conn);
                 cmd.Parameters.AddWithValue("@transferId", id);
@@ -45,7 +46,7 @@ namespace TenmoServer.DAO
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();
-
+                
                 string sqlCommand = @"SELECT * FROM transfers WHERE account_from = @id OR account_to = @id";
                 SqlCommand cmd = new SqlCommand(sqlCommand, conn);
                 cmd.Parameters.AddWithValue("@id", id);
