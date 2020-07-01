@@ -40,5 +40,12 @@ namespace TenmoClient
             IRestResponse<Transfer> response = client.Get<Transfer>(request);
             return response.Data;
         }
+
+        public List<ReturnUser> GetAllUsers()
+        {
+            RestRequest request = new RestRequest($"{API_URL}accounts");
+            IRestResponse<List<ReturnUser>> response = client.Get<List<ReturnUser>>(request);
+            return response.Data;
+        }
     }
 }

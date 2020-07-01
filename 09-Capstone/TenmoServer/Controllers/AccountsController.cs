@@ -57,7 +57,7 @@ namespace TenmoServer.Controllers
         }
 
         [HttpGet("transfers")]
-        public ActionResult<List<Transfer>> GetUserTransfers(int id = 0)
+        public ActionResult<List<Transfer>> GetUserTransfers()
         {
             List<Transfer> transfers = transferDAO.GetUserTransfers(userId);
 
@@ -89,6 +89,33 @@ namespace TenmoServer.Controllers
                 return NotFound();
             }
             return users;
+        }
+
+        [HttpPost("transfers")]
+        public ActionResult<Transfer> StartTransfer(Transfer transfer)
+        {
+            Account userAccount = accountSqlDAO.GetBalance(userId);
+            Transfer newTransfer;
+
+            if (userId == transfer.AccountTo.UserId)
+            {
+                return Forbid();
+            }
+
+            if (userAccount.Balance >= transfer.Amount)
+            {
+                transfer.TransferStatus = TransferStatus.Approved;
+
+                newTransfer = transferDAO.CreateTransfer(transfer);
+                transferDAO.InitiateTransfer(newTransfer);
+
+                return Ok(newTransfer);
+            }
+
+            transfer.TransferStatus = TransferStatus.Rejected;
+            newTransfer = transferDAO.CreateTransfer(transfer);
+
+            return Conflict(newTransfer);
         }
     }
 }

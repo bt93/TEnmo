@@ -123,6 +123,12 @@ namespace TenmoClient
                 else if (menuSelection == 4)
                 {
                     // Send TE bucks
+                    List<ReturnUser> users = apiService.GetAllUsers();
+
+                    foreach(ReturnUser user in users)
+                    {
+                        Console.WriteLine(user);
+                    }
 
                 }
                 else if (menuSelection == 5)

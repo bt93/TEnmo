@@ -96,23 +96,23 @@ namespace TenmoServer.DAO
             return allUsers;
         }
 
-        public void InitiateTransfer(Account fromUser, Account toUser, decimal transferAmount)
+        public void InitiateTransfer(Transfer transfer)
         {
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
-                string sqlUpdateFrom = @"UPDATE accounts SET Balance = @fromUserBalance where user_id = @fromUser";
-                string sqlUpdateTo = @"UPDATE accounts SET balance = @toUserBalance where user_id = @toUser";
+                string sqlUpdateFrom = @"UPDATE accounts SET Balance = balance - @fromUserBalance where user_id = @fromUser";
+                string sqlUpdateTo = @"UPDATE accounts SET balance = balance + @toUserBalance where user_id = @toUser";
 
                 conn.Open();
                 //Update the from user 
                 SqlCommand cmd = new SqlCommand(sqlUpdateFrom, conn);
-                cmd.Parameters.AddWithValue("@fromUser", fromUser.UserId);
-                cmd.Parameters.AddWithValue("@fromUserBalance", fromUser.Balance);
+                cmd.Parameters.AddWithValue("@fromUser", transfer.AccountFrom.UserId);
+                cmd.Parameters.AddWithValue("@fromUserBalance", transfer.Amount);
                 cmd.ExecuteNonQuery();
                 //Update the To User 
                 cmd = new SqlCommand(sqlUpdateTo, conn);
-                cmd.Parameters.AddWithValue("@toUser", toUser.UserId);
-                cmd.Parameters.AddWithValue("@toUserBalance", toUser.Balance);
+                cmd.Parameters.AddWithValue("@toUser", transfer.AccountTo.UserId);
+                cmd.Parameters.AddWithValue("@toUserBalance", transfer.Amount);
                 cmd.ExecuteNonQuery();
 
 
@@ -125,17 +125,18 @@ namespace TenmoServer.DAO
             {
                 conn.Open();
 
-                const string sql = @"INSERT INTO transfers (transfer_type_id, transfer_status_id, account_from, account_to, ammount)
-                                        VALUES (@transfer_type_id, @transfer_status_id, @account_from, @account_to, @ammount)";
+                const string sql = @"INSERT INTO transfers (transfer_type_id, transfer_status_id, account_from, account_to, amount)
+                                        VALUES (@transfer_type_id, @transfer_status_id, @account_from, @account_to, @amount)
+                                        SELECT @@Identity";
 
                 SqlCommand cmd = new SqlCommand(sql, conn);
                 cmd.Parameters.AddWithValue("@transfer_type_id", transfer.TransferType);
                 cmd.Parameters.AddWithValue("@transfer_status_id", transfer.TransferStatus);
-                cmd.Parameters.AddWithValue("@transfer_from", transfer.AccountFrom);
-                cmd.Parameters.AddWithValue("@account_to", transfer.AccountTo);
-                cmd.Parameters.AddWithValue("@ammount", transfer.Amount);
+                cmd.Parameters.AddWithValue("@account_from", transfer.AccountFrom.UserId);
+                cmd.Parameters.AddWithValue("@account_to", transfer.AccountTo.UserId);
+                cmd.Parameters.AddWithValue("@amount", transfer.Amount);
 
-                cmd.ExecuteNonQuery();
+                transfer.TransferId = Convert.ToInt32(cmd.ExecuteScalar());
             }
             return transfer;
         }

@@ -9,6 +9,6 @@ namespace TenmoServer.DAO
         Transfer GetTransferById(int id);
         List<ReturnUser> GetUsersForTransfer();
         List<Transfer> GetUserTransfers(int id);
-        void InitiateTransfer(Account fromUser, Account toUser, decimal transferAmount);
+        void InitiateTransfer(Transfer transfer);
     }
 }
