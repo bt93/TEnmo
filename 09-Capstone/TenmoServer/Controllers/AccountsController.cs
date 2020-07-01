@@ -57,16 +57,27 @@ namespace TenmoServer.Controllers
         }
 
         [HttpGet("transfers")]
-        public ActionResult<List<Transfer>> GetUserTransfers()
+        public ActionResult<List<Transfer>> GetUserTransfers(int id = 0)
         {
             List<Transfer> transfers = transferDAO.GetUserTransfers(userId);
 
             if (transfers == null)
             {
+                
                 return NotFound();
             }
 
             return transfers;
+        }
+        [HttpGet("transfers/{id}")]
+        public ActionResult<Transfer> GetTransferId(int id)
+        {
+            Transfer transfer = transferDAO.GetTransferById(id);
+            if (transfer == null)
+            {
+                return NotFound();
+            }
+            return transfer;
         }
         [HttpGet]
         public ActionResult<List<ReturnUser>> GetUsersForTransfer()

@@ -38,5 +38,10 @@ namespace TenmoServer.Models
                 return $"{TransferId,8} To: {AccountTo.Username,12} Balance: {Amount:C}";
             }
         }
+
+        public string DetailsForTransfer()
+        {
+            return $"ID: {TransferId} \n From: {AccountFrom.Username} \n To: {AccountTo.Username} \n Type: {this.TransferType} \n Status: {this.TransferStatus} \n Amount: {Amount:C}";
+        }
     }
 }

@@ -111,6 +111,9 @@ namespace TenmoClient
                     {
                         Console.WriteLine(transfer); 
                     }
+                    int transferId = consoleService.PromptForTransferID("pick a transfer");
+                    Transfer singleTransfer = apiService.GetTransferById(transferId);
+                    Console.WriteLine(singleTransfer.DetailsForTransfer()); 
                 }
                 else if (menuSelection == 3)
                 {

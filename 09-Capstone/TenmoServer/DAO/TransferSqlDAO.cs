@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.Formatters.Xml;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
@@ -16,7 +17,28 @@ namespace TenmoServer.DAO
         {
             this.connectionString = dbConnectionString;
         }
-
+        public Transfer GetTransferById(int id)
+        {
+            Transfer transfer = new Transfer();
+            using(SqlConnection conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+                string sqlQuery = @"SELECT * FROM transfers where transfer_id = @transferId";
+                SqlCommand cmd = new SqlCommand(sqlQuery, conn);
+                cmd.Parameters.AddWithValue("@transferId", id);
+                SqlDataReader rdr = cmd.ExecuteReader();
+                while (rdr.Read())
+                {
+                    transfer.TransferId = Convert.ToInt32(rdr["transfer_id"]);
+                    transfer.TransferType = (TransferType)Convert.ToInt32(rdr["transfer_type_id"]);
+                    transfer.TransferStatus = (TransferStatus)Convert.ToInt32(rdr["transfer_status_id"]);
+                    transfer.AccountFrom = GetUserById(Convert.ToInt32(rdr["account_from"]));
+                    transfer.AccountTo = GetUserById(Convert.ToInt32(rdr["account_to"]));
+                    transfer.Amount = Convert.ToDecimal(rdr["amount"]);
+                }
+            }
+            return transfer;
+        }
         public List<Transfer> GetUserTransfers(int id)
         {
             List<Transfer> transfers = new List<Transfer>();

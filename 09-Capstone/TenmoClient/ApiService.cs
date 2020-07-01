@@ -34,5 +34,11 @@ namespace TenmoClient
 
             return response.Data;
         }
+        public Transfer GetTransferById(int id)
+        {
+            RestRequest request = new RestRequest($"{API_URL}accounts/transfers/{id}");
+            IRestResponse<Transfer> response = client.Get<Transfer>(request);
+            return response.Data;
+        }
     }
 }
