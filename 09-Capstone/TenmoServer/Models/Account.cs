@@ -19,6 +19,7 @@ namespace TenmoServer.Models
             this.Balance = balance;
         }
 
+        public string UserName { get; set; }
         public int AccountId { get; set; }
         public int UserId { get; set; }
         public decimal Balance { get; set; }

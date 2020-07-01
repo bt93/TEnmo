@@ -24,7 +24,8 @@ namespace TenmoServer.DAO
             {
                 conn.Open();
 
-                const string sql = @"SELECT balance FROM accounts WHERE user_id = @user_id";
+                // TODO: Fix query
+                const string sql = @"SELECT * FROM accounts JOIN users ON accounts.user_id = users.user_id WHERE users.user_id = @user_id";
                 SqlCommand cmd = new SqlCommand(sql, conn);
                 cmd.Parameters.AddWithValue("@user_id", id);
 
@@ -32,6 +33,9 @@ namespace TenmoServer.DAO
                 while (rdr.Read())
                 {
                     account.Balance = Convert.ToDecimal(rdr["balance"]);
+                    account.UserName = Convert.ToString(rdr["username"]);
+                    account.AccountId = Convert.ToInt32(rdr["account_id"]);
+                    account.UserId = Convert.ToInt32(rdr["user_id"]);
                 }
                 
 

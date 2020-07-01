@@ -6,13 +6,40 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TenmoServer.Models;
 using TenmoServer.DAO;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TenmoServer.Controllers
 {
     [Route("[controller]")]
     [ApiController]
+    [Authorize]
     public class AccountsController : ControllerBase
     {
+        private string userName
+        {
+            get
+            {
+                return User?.Identity?.Name;
+            }
+        }
+
+        private int userId
+        {
+            get
+            {
+                foreach (Claim claim in User.Claims)
+                {
+                    if (claim.Type == "sub")
+                    {
+                        return Convert.ToInt32(claim.Value);
+                    }
+                }
+
+                return 0;
+            }
+        }
+
         private IAccountDAO accountSqlDAO;
         private ITransferDAO transferDAO;
         public AccountsController(IAccountDAO accountDAO, ITransferDAO transferDAO)
@@ -20,19 +47,19 @@ namespace TenmoServer.Controllers
             this.accountSqlDAO = accountDAO;
             this.transferDAO = transferDAO;
         }
-        [HttpGet("{id}")]
-        public ActionResult<decimal> GetBalance(int id)
+        [HttpGet("balance")]
+        public ActionResult<Account> GetBalance()
         {
-            Account balance =  accountSqlDAO.GetBalance(id);
+            Account account =  accountSqlDAO.GetBalance(userId);
 
-            return balance.Balance;
+            return account;
             
         }
 
-        [HttpGet("transfers/{id}")]
-        public ActionResult<List<Transfer>> GetUserTransfers(int id)
+        [HttpGet("transfers")]
+        public ActionResult<List<Transfer>> GetUserTransfers()
         {
-            List<Transfer> transfers = transferDAO.GetUserTransfers(id);
+            List<Transfer> transfers = transferDAO.GetUserTransfers(userId);
 
             if (transfers == null)
             {
