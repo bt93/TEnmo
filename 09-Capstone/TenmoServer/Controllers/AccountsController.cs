@@ -122,5 +122,32 @@ namespace TenmoServer.Controllers
 
             return Conflict(newTransfer);
         }
+
+        [HttpPost("transfers/request")]
+        public ActionResult<Transfer> ReqeustTransfer(Transfer transfer)
+        {
+            Account givingAccount = accountSqlDAO.GetBalance(transfer.AccountFrom.UserId);
+            Transfer newTransfer;
+
+            if (userId == transfer.AccountFrom.UserId)
+            {
+                return Forbid();
+            }
+
+            if (givingAccount.Balance >= transfer.Amount)
+            {
+                transfer.TransferStatus = TransferStatus.Pending;
+                transfer.TransferType = TransferType.Request;
+
+                newTransfer = transferDAO.CreateTransfer(transfer);
+
+                return Ok(newTransfer);
+            }
+
+            transfer.TransferStatus = TransferStatus.Rejected;
+            newTransfer = transferDAO.CreateTransfer(transfer);
+
+            return Conflict(newTransfer);
+        }
     }
 }

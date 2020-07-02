@@ -22,6 +22,7 @@ namespace TenmoClient
                 int loginRegister = -1;
                 while (loginRegister != 1 && loginRegister != 2)
                 {
+                    Console.Clear();
                     Console.WriteLine("Welcome to TEnmo!");
                     Console.WriteLine("1: Login");
                     Console.WriteLine("2: Register");
@@ -79,6 +80,7 @@ namespace TenmoClient
             int menuSelection = -1;
             while (menuSelection != 0)
             {
+                Console.Clear();
                 Console.WriteLine("");
                 Console.WriteLine("Welcome to TEnmo! Please make a selection: ");
                 Console.WriteLine("1: View your current balance");
@@ -109,7 +111,8 @@ namespace TenmoClient
                     {
                         Console.WriteLine(ex.Message);
                     }
-                    
+                    Console.Write("Press Enter to continue.");
+                    Console.ReadLine();
                 }
                 else if (menuSelection == 2)
                 {
@@ -129,30 +132,54 @@ namespace TenmoClient
                     {
                         Console.WriteLine(ex.Message);
                     }
-                    
+                    Console.Write("Press Enter to continue.");
+                    Console.ReadLine();
                 }
                 else if (menuSelection == 3)
                 {
                     // View your pending requests
-
+                    Console.Write("Press Enter to continue.");
+                    Console.ReadLine();
                 }
                 else if (menuSelection == 4)
                 {
                     // Send TE bucks
                     try
                     {
+                        Console.Clear();
+                        //Arrange
+                        int toUserId = 0;
+                        decimal amount = -1;
                         List<ReturnUser> users = apiService.GetAllUsers();
-
-                        foreach (ReturnUser user in users)
+                        Dictionary<int, ReturnUser> userMenu = new Dictionary<int, ReturnUser>();
+                        // making a dictionary for menu options and using int key for access to ReturnUsers
+                        int key = 1;
+                        foreach(ReturnUser user in users)
                         {
-                            Console.WriteLine(user);
+                            userMenu.Add(key, user);
+                            key++;
+                        }
+
+                        foreach (var option in userMenu)
+                        {
+                            Console.WriteLine($"{option.Key}: {option.Value.Username}");
                         }
 
                         // Choose a user and amount
-                        int toUserId = consoleService.PromptForUserID("transfer TE bucks to");
-                        int fromUserId = UserService.GetUserId();
-                        decimal amount = -1;
-
+                        bool isValid = false;
+                        while (!isValid)
+                        {
+                            toUserId = consoleService.PromptForUserID("transfer TE bucks to");
+                            if (userMenu.ContainsKey(toUserId))
+                            {
+                                isValid = true;
+                            }
+                            else
+                            {
+                                Console.WriteLine("Please enter a valid user Id.");
+                            }
+                        }
+                        
                         while (amount == -1)
                         {
                             amount = consoleService.PromtForAmount("How much would you like to transfer?");
@@ -163,6 +190,7 @@ namespace TenmoClient
                         }
 
                         // Enter in transfer data
+                        int fromUserId = UserService.GetUserId();
                         Transfer newTransfer = new Transfer(toUserId, fromUserId, amount);
                         // Send it
                         newTransfer = apiService.SendTEBucks(newTransfer);
@@ -172,11 +200,14 @@ namespace TenmoClient
                     {
                         Console.WriteLine(x.Message);
                     }
+                    Console.Write("Press Enter to continue.");
+                    Console.ReadLine();
                 }
                 else if (menuSelection == 5)
                 {
                     // Request TE bucks
-
+                    Console.Write("Press Enter to continue.");
+                    Console.ReadLine();
                 }
                 else if (menuSelection == 6)
                 {
@@ -184,6 +215,8 @@ namespace TenmoClient
                     Console.WriteLine("");
                     UserService.SetLogin(new API_User()); //wipe out previous login info
                     return; //return to entry point
+                    Console.Write("Press Enter to continue.");
+                    Console.ReadLine();
                 }
                 else
                 {
