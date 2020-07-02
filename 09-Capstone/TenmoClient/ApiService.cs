@@ -60,6 +60,15 @@ namespace TenmoClient
             return response.Data;
         }
 
+        public Transfer RequestTransfer(Transfer transfer)
+        {
+            RestRequest request = new RestRequest($"{API_URL}accounts/transfers/reqeust");
+            request.AddJsonBody(transfer);
+            IRestResponse<Transfer> response = client.Post<Transfer>(request);
+            ErrorHandling(response);
+            return response.Data;
+        }
+
         public void ErrorHandling(IRestResponse resp)
         {
             if (resp.ResponseStatus != ResponseStatus.Completed)
