@@ -47,6 +47,10 @@ namespace TenmoServer.Controllers
             this.accountSqlDAO = accountDAO;
             this.transferDAO = transferDAO;
         }
+        /// <summary>
+        /// Allows the user to get  
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("balance")]
         public ActionResult<Account> GetBalance()
         {
