@@ -4,10 +4,35 @@
         <name>TenmoServer</name>
     </assembly>
     <members>
+<<<<<<< HEAD
         <member name="M:TenmoServer.Controllers.AccountsController.GetBalance">
             <summary>
             Allows the user to get  
             </summary>
+=======
+        <member name="T:TenmoServer.Controllers.AccountsController">
+            <summary>
+            The base controller for the accounts page.
+            </summary>
+        </member>
+        <member name="M:TenmoServer.Controllers.AccountsController.GetBalance">
+            <summary>
+            Allows the user to get  the balance of the logged in account.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:TenmoServer.Controllers.AccountsController.GetUserTransfers">
+            <summary>
+            Gets a list of all the transfers the user has associated with their account.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:TenmoServer.Controllers.AccountsController.GetTransferId(System.Int32)">
+            <summary>
+            Get a specific transfer and more information on the transfer by ID
+            </summary>
+            <param name="transferId"></param>
+>>>>>>> 81c320d0ba63d50c927b13ea602dff66a117cc02
             <returns></returns>
         </member>
         <member name="T:TenmoServer.Models.ReturnUser">
