@@ -11,6 +11,9 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace TenmoServer.Controllers
 {
+    /// <summary>
+    /// The base controller for the accounts page.
+    /// </summary>
     [Route("[controller]")]
     [ApiController]
     [Authorize]
@@ -48,7 +51,7 @@ namespace TenmoServer.Controllers
             this.transferDAO = transferDAO;
         }
         /// <summary>
-        /// Allows the user to get  
+        /// Allows the user to get  the balance of the logged in account.
         /// </summary>
         /// <returns></returns>
         [HttpGet("balance")]
@@ -59,7 +62,10 @@ namespace TenmoServer.Controllers
             return account;
             
         }
-
+        /// <summary>
+        /// Gets a list of all the transfers the user has associated with their account.
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("transfers")]
         public ActionResult<List<Transfer>> GetUserTransfers()
         {
@@ -73,7 +79,11 @@ namespace TenmoServer.Controllers
 
             return transfers;
         }
-        
+        /// <summary>
+        /// Get a specific transfer and more information on the transfer by ID
+        /// </summary>
+        /// <param name="transferId"></param>
+        /// <returns></returns>
         [HttpGet("transfers/{transferId}")]
         public ActionResult<Transfer> GetTransferId(int transferId)
         {
