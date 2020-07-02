@@ -138,6 +138,20 @@ namespace TenmoClient
                 else if (menuSelection == 3)
                 {
                     // View your pending requests
+                    List<Transfer> transfers = apiService.GetTransfers();
+
+                    foreach (Transfer transfer in transfers)
+                    {
+                        bool isReqeust = transfer.TransferType == TransferType.Request;
+                        bool isPending = transfer.TransferStatus == TransferStatus.Pending;
+                        bool isFromAccount = transfer.AccountFrom.UserId == UserService.GetUserId();
+
+                        if (isReqeust && isPending && isFromAccount)
+                        {
+                            Console.WriteLine(transfer.ReqeustTransfer());
+                        }
+                    }
+
                     Console.Write("Press Enter to continue.");
                     Console.ReadLine();
                 }
