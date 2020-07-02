@@ -151,7 +151,17 @@ namespace TenmoClient
                         // Choose a user and amount
                         int toUserId = consoleService.PromptForUserID("transfer TE bucks to");
                         int fromUserId = UserService.GetUserId();
-                        decimal amount = consoleService.PromtForAmount("How much would you like to transfer?");
+                        decimal amount = -1;
+
+                        while (amount == -1)
+                        {
+                            amount = consoleService.PromtForAmount("How much would you like to transfer?");
+                        }
+                        if (amount == 0)
+                        {
+                            continue;
+                        }
+
                         // Enter in transfer data
                         Transfer newTransfer = new Transfer(toUserId, fromUserId, amount);
                         // Send it

@@ -93,14 +93,14 @@ namespace TenmoClient
             if (!decimal.TryParse(Console.ReadLine(), out decimal amount))
             {
                 Console.WriteLine("Invalid input. Only input a number.");
-                return 0;
+                return -1;
             }
             else
             {
                 if (amount < 0)
                 {
                     Console.WriteLine("Only input a positive number.");
-                    return 0;
+                    return -1;
                 }
                 return amount;
             }

@@ -7,6 +7,7 @@ namespace TenmoServer.DAO
     {
         Transfer CreateTransfer(Transfer transfer);
         Transfer GetTransferById(int id, int userId);
+        ReturnUser GetUserById(int id);
         List<ReturnUser> GetUsersForTransfer();
         List<Transfer> GetUserTransfers(int id);
         void InitiateTransfer(Transfer transfer);
