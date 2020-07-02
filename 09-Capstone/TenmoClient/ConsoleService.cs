@@ -26,6 +26,21 @@ namespace TenmoClient
             }
         }
 
+        public int PromptForUserID(string action)
+        {
+            Console.WriteLine("");
+            Console.Write("Please enter ID of user to " + action + " (0 to cancel): ");
+            if (!int.TryParse(Console.ReadLine(), out int auctionId))
+            {
+                Console.WriteLine("Invalid input. Only input a number.");
+                return 0;
+            }
+            else
+            {
+                return auctionId;
+            }
+        }
+
         public LoginUser PromptForLogin()
         {
             Console.Write("Username: ");
@@ -69,6 +84,26 @@ namespace TenmoClient
             while (key.Key != ConsoleKey.Enter);
             Console.WriteLine("");
             return pass;
+        }
+
+        public decimal PromtForAmount(string message)
+        {
+            Console.WriteLine("");
+            Console.Write(message + " (0 to cancel): ");
+            if (!decimal.TryParse(Console.ReadLine(), out decimal amount))
+            {
+                Console.WriteLine("Invalid input. Only input a number.");
+                return 0;
+            }
+            else
+            {
+                if (amount < 0)
+                {
+                    Console.WriteLine("Only input a positive number.");
+                    return 0;
+                }
+                return amount;
+            }
         }
     }
 }

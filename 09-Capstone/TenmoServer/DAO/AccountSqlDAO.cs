@@ -24,7 +24,7 @@ namespace TenmoServer.DAO
             {
                 conn.Open();
 
-                // TODO: Fix query
+                
                 const string sql = @"SELECT * FROM accounts JOIN users ON accounts.user_id = users.user_id WHERE users.user_id = @user_id";
                 SqlCommand cmd = new SqlCommand(sql, conn);
                 cmd.Parameters.AddWithValue("@user_id", id);

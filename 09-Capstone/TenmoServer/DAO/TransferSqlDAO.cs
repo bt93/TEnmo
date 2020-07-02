@@ -17,16 +17,18 @@ namespace TenmoServer.DAO
         {
             this.connectionString = dbConnectionString;
         }
-        public Transfer GetTransferById(int id)
+        public Transfer GetTransferById(int transferId, int userId)
         {
             Transfer transfer = new Transfer();
             using(SqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();
 
-                string sqlQuery = @"SELECT * FROM transfers where transfer_id = @transferId";
+                // This query only gets transfers that the current user is a part of
+                string sqlQuery = @"SELECT * FROM transfers WHERE transfer_id = @transferId AND (account_from = @id OR account_to = @id)";
                 SqlCommand cmd = new SqlCommand(sqlQuery, conn);
-                cmd.Parameters.AddWithValue("@transferId", id);
+                cmd.Parameters.AddWithValue("@transferId", transferId);
+                cmd.Parameters.AddWithValue("@id", userId);
                 SqlDataReader rdr = cmd.ExecuteReader();
                 while (rdr.Read())
                 {
@@ -131,8 +133,8 @@ namespace TenmoServer.DAO
                                         SELECT @@Identity";
 
                 SqlCommand cmd = new SqlCommand(sql, conn);
-                cmd.Parameters.AddWithValue("@transfer_type_id", transfer.TransferType);
-                cmd.Parameters.AddWithValue("@transfer_status_id", transfer.TransferStatus);
+                cmd.Parameters.AddWithValue("@transfer_type_id", (int)transfer.TransferType);
+                cmd.Parameters.AddWithValue("@transfer_status_id", (int)transfer.TransferStatus);
                 cmd.Parameters.AddWithValue("@account_from", transfer.AccountFrom.UserId);
                 cmd.Parameters.AddWithValue("@account_to", transfer.AccountTo.UserId);
                 cmd.Parameters.AddWithValue("@amount", transfer.Amount);

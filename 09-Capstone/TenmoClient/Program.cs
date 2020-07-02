@@ -99,21 +99,37 @@ namespace TenmoClient
                 else if (menuSelection == 1)
                 {
                     // View your current balance
-                    Account account = apiService.GetBalance();
+                    try
+                    {
+                        Account account = apiService.GetBalance();
 
-                    Console.WriteLine($"Current balance: {account.Balance:C}");
+                        Console.WriteLine($"Current balance: {account.Balance:C}");
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
+                    
                 }
                 else if (menuSelection == 2)
                 {
                     // View your past transfers
-                    List<Transfer> transfers = apiService.GetTransfers();
-                    foreach(Transfer transfer in transfers)
+                    try
                     {
-                        Console.WriteLine(transfer); 
+                        List<Transfer> transfers = apiService.GetTransfers();
+                        foreach (Transfer transfer in transfers)
+                        {
+                            Console.WriteLine(transfer);
+                        }
+                        int transferId = consoleService.PromptForTransferID("pick a transfer");
+                        Transfer singleTransfer = apiService.GetTransferById(transferId);
+                        Console.WriteLine(singleTransfer.DetailsForTransfer());
                     }
-                    int transferId = consoleService.PromptForTransferID("pick a transfer");
-                    Transfer singleTransfer = apiService.GetTransferById(transferId);
-                    Console.WriteLine(singleTransfer.DetailsForTransfer()); 
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
+                    
                 }
                 else if (menuSelection == 3)
                 {
@@ -123,13 +139,29 @@ namespace TenmoClient
                 else if (menuSelection == 4)
                 {
                     // Send TE bucks
-                    List<ReturnUser> users = apiService.GetAllUsers();
-
-                    foreach(ReturnUser user in users)
+                    try
                     {
-                        Console.WriteLine(user);
-                    }
+                        List<ReturnUser> users = apiService.GetAllUsers();
 
+                        foreach (ReturnUser user in users)
+                        {
+                            Console.WriteLine(user);
+                        }
+
+                        // Choose a user and amount
+                        int toUserId = consoleService.PromptForUserID("transfer TE bucks to");
+                        int fromUserId = UserService.GetUserId();
+                        decimal amount = consoleService.PromtForAmount("How much would you like to transfer?");
+                        // Enter in transfer data
+                        Transfer newTransfer = new Transfer(toUserId, fromUserId, amount);
+                        // Send it
+                        newTransfer = apiService.SendTEBucks(newTransfer);
+                        Console.WriteLine(newTransfer.ToString());
+                    }
+                    catch (Exception x)
+                    {
+                        Console.WriteLine(x.Message);
+                    }
                 }
                 else if (menuSelection == 5)
                 {

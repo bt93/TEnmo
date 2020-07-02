@@ -22,7 +22,7 @@ namespace TenmoServer.Models
         //TODO: Change user back to int 
         public int TransferId { get; set; }
         public TransferType TransferType { get; set; } = TransferType.Send;
-        public TransferStatus TransferStatus { get; set; }
+        public TransferStatus TransferStatus { get; set; } = TransferStatus.Pending;
         [Required]
         public ReturnUser AccountFrom { get; set; }
         [Required]

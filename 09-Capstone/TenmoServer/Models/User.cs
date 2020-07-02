@@ -2,7 +2,7 @@
 {
     public class User
     {
-        // TODO: add data validation
+        
         public int UserId { get; set; }
         public string Username { get; set; }
         public string PasswordHash { get; set; }

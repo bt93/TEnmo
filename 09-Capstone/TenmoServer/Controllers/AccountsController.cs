@@ -69,12 +69,12 @@ namespace TenmoServer.Controllers
 
             return transfers;
         }
-        // TODO: User can access other peoples tranfers
-        [HttpGet("transfers/{id}")]
-        public ActionResult<Transfer> GetTransferId(int id)
+        
+        [HttpGet("transfers/{transferId}")]
+        public ActionResult<Transfer> GetTransferId(int transferId)
         {
-            Transfer transfer = transferDAO.GetTransferById(id);
-            if (transfer == null)
+            Transfer transfer = transferDAO.GetTransferById(transferId, userId);
+            if (transfer.AccountFrom == null || transfer.AccountTo == null)
             {
                 return NotFound();
             }
@@ -97,7 +97,7 @@ namespace TenmoServer.Controllers
         {
             Account userAccount = accountSqlDAO.GetBalance(userId);
             Transfer newTransfer;
-
+            
             if (userId == transfer.AccountTo.UserId)
             {
                 return Forbid();

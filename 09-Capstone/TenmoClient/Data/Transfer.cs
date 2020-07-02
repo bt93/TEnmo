@@ -18,10 +18,26 @@ namespace TenmoServer.Models
     }
     public class Transfer
     {
-       
+       public Transfer(int toUserId, int fromUserId, decimal amount)
+        {
+            ReturnUser toUser = new ReturnUser();
+            toUser.UserId = toUserId;
+            ReturnUser fromUser = new ReturnUser();
+            fromUser.UserId = fromUserId;
+
+            this.AccountFrom = fromUser;
+            this.AccountTo = toUser;
+            this.Amount = amount;
+        }
+
+        public Transfer()
+        {
+
+        }
+
         public int TransferId { get; set; }
-        public TransferType TransferType { get; set; }
-        public TransferStatus TransferStatus { get; set; }
+        public TransferType TransferType { get; set; } = TransferType.Send;
+        public TransferStatus TransferStatus { get; set; } = TransferStatus.Pending;
         public ReturnUser AccountFrom { get; set; }
         public ReturnUser AccountTo { get; set; }
         public decimal Amount { get; set; }
