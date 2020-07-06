@@ -219,6 +219,8 @@ namespace TenmoClient
                 }
                 else if (menuSelection == 5)
                 {
+                    //TODO: Change list to dictionary
+                    //TODO: Loop through dictionary and pick what you want to do with the request
                     // Request TE bucks
                     try
                     {

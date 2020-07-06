@@ -17,9 +17,9 @@ namespace TenmoServer.Models
         Approved = 2,
         Rejected = 3
     }
+    //TODO: Make comments for each prop for swagger.
     public class Transfer
     {
-        //TODO: Change user back to int 
         public int TransferId { get; set; }
         public TransferType TransferType { get; set; } = TransferType.Send;
         public TransferStatus TransferStatus { get; set; } = TransferStatus.Pending;
