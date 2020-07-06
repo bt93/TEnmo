@@ -101,6 +101,7 @@ namespace TenmoServer.DAO
 
         public void InitiateTransfer(Transfer transfer)
         {
+            // TODO: Use a Transaction for safety of data
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 string sqlUpdateFrom = @"UPDATE accounts SET Balance = balance - @fromUserBalance where user_id = @fromUser";
@@ -124,6 +125,7 @@ namespace TenmoServer.DAO
 
         public Transfer CreateTransfer(Transfer transfer)
         {
+            // TODO: Use a Transaction for safety of data
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();

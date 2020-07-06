@@ -2,13 +2,14 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.IO;
 using TenmoServer.DAO;
-using TenmoServer.Models;
+//using TenmoServer.Models;
 using TenmoServer.Security;
 using TenmoServer.Controllers;
 using RestSharp;
 using RestSharp.Authenticators;
 using TenmoServer;
 using System.Collections.Generic;
+using TenmoClient.Data;
 
 namespace TenmoTests
 {
@@ -38,20 +39,20 @@ namespace TenmoTests
             // Login to get credentials
             RestRequest request = new RestRequest(API_URL_LOGIN);
             request.AddJsonBody(user);
-            IRestResponse<ReturnUser> response = client.Post<ReturnUser>(request);
-            ReturnUser authenticatedUser = response.Data;
+            IRestResponse<API_User> response = client.Post<API_User>(request);
+            API_User authenticatedUser = response.Data;
             client.Authenticator = new JwtAuthenticator(authenticatedUser.Token);
 
             // get highest Id
             request = new RestRequest(API_URL + "/transfers");
-            IRestResponse<List<ReturnUser>> responseUsers = client.Get<List<ReturnUser>>(request);
-            List<ReturnUser> users = responseUsers.Data;
+            IRestResponse<List<API_User>> responseUsers = client.Get<List<API_User>>(request);
+            List<API_User> users = responseUsers.Data;
             int highestId = 0;
-            foreach (ReturnUser returnUser in users)
+            foreach (API_User apiUser in users)
             {
-                if (returnUser.UserId > highestId)
+                if (apiUser.UserId > highestId)
                 {
-                    highestId = returnUser.UserId;
+                    highestId = apiUser.UserId;
                 }
             }
 
@@ -68,8 +69,8 @@ namespace TenmoTests
             // Login with testUser
             registerRequest = new RestRequest(API_URL_LOGIN);
             registerRequest.AddJsonBody(testUser);
-            IRestResponse<ReturnUser> loginResponse = registerClient.Post<ReturnUser>(registerRequest);
-            ReturnUser returnTestUser = loginResponse.Data;
+            IRestResponse<API_User> loginResponse = registerClient.Post<API_User>(registerRequest);
+            API_User returnTestUser = loginResponse.Data;
             registerClient.Authenticator = new JwtAuthenticator(returnTestUser.Token);
 
             // Act
@@ -77,6 +78,7 @@ namespace TenmoTests
             registerRequest = new RestRequest(API_URL + "/balance");
             IRestResponse<Account> balanceResponse = registerClient.Get<Account>(registerRequest);
             Account account = balanceResponse.Data;
+            
 
             // Assert
             Assert.AreEqual(1000M, account.Balance);
@@ -99,7 +101,7 @@ namespace TenmoTests
              * ...
              * 
              **/
-            
+
 
 
         }

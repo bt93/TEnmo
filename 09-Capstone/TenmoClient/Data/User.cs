@@ -1,4 +1,4 @@
-﻿namespace TenmoServer.Models
+﻿namespace TenmoClient.Data
 {
     public class User
     {

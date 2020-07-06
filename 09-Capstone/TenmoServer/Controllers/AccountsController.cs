@@ -8,6 +8,7 @@ using TenmoServer.Models;
 using TenmoServer.DAO;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using System.Transactions;
 
 namespace TenmoServer.Controllers
 {
@@ -69,6 +70,7 @@ namespace TenmoServer.Controllers
         [HttpGet("transfers")]
         public ActionResult<List<Transfer>> GetUserTransfers()
         {
+            // TODO: add try catch
             List<Transfer> transfers = transferDAO.GetUserTransfers(userId);
 
             if (transfers == null)
@@ -87,6 +89,7 @@ namespace TenmoServer.Controllers
         [HttpGet("transfers/{transferId}")]
         public ActionResult<Transfer> GetTransferId(int transferId)
         {
+            // TODO: add try catch
             Transfer transfer = transferDAO.GetTransferById(transferId, userId);
             if (transfer.AccountFrom == null || transfer.AccountTo == null)
             {
@@ -97,6 +100,7 @@ namespace TenmoServer.Controllers
         [HttpGet]
         public ActionResult<List<ReturnUser>> GetUsersForTransfer()
         {
+            // TODO: add try catch
             List<ReturnUser> users = transferDAO.GetUsersForTransfer();
 
             if (users == null)
@@ -109,6 +113,7 @@ namespace TenmoServer.Controllers
         [HttpPost("transfers")]
         public ActionResult<Transfer> StartTransfer(Transfer transfer)
         {
+            // TODO: add try catch
             Account userAccount = accountSqlDAO.GetBalance(userId);
             Transfer newTransfer;
             
@@ -120,7 +125,7 @@ namespace TenmoServer.Controllers
             if (userAccount.Balance >= transfer.Amount)
             {
                 transfer.TransferStatus = TransferStatus.Approved;
-
+                // TODO: Begin Transaction then complete after   
                 newTransfer = transferDAO.CreateTransfer(transfer);
                 transferDAO.InitiateTransfer(newTransfer);
 
@@ -136,6 +141,7 @@ namespace TenmoServer.Controllers
         [HttpPost("transfers/request")]
         public ActionResult<Transfer> ReqeustTransfer(Transfer transfer)
         {
+            // TODO: add try catch
             Account givingAccount = accountSqlDAO.GetBalance(transfer.AccountFrom.UserId);
             Transfer newTransfer;
 

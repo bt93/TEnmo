@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\TenmoClient\TenmoClient.csproj" />
     <ProjectReference Include="..\TenmoServer\TenmoServer.csproj" />
   </ItemGroup>
 

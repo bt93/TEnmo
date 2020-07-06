@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using TenmoClient.Data;
-using TenmoServer.Models;
+
 
 namespace TenmoClient
 {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using RestSharp;
 using RestSharp.Authenticators;
-using TenmoServer.Models;
+using TenmoClient.Data;
 using System.Net;
 
 namespace TenmoClient
