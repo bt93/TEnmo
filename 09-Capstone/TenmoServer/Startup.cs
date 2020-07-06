@@ -20,6 +20,9 @@ namespace TenmoServer
     /// </summary>
     public class Startup
     {
+        // Can be changed to test database using Startup.Test()
+        private string connectionString;
+
         /// <summary>
         /// 
         /// </summary>
@@ -41,7 +44,7 @@ namespace TenmoServer
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            string connectionString = Configuration.GetConnectionString("Project");
+            connectionString = Configuration.GetConnectionString("Project");
 
             //Adds the swagger services
             services.AddSwaggerGen(c =>
@@ -105,6 +108,12 @@ namespace TenmoServer
             app.UseAuthentication();
             app.UseHttpsRedirection();
             app.UseMvc();
+        }
+
+        // Used in testing to point to test database
+        public void Test()
+        {
+            connectionString = Configuration.GetConnectionString("Test");
         }
     }
 }
