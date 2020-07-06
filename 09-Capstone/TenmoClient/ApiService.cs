@@ -62,7 +62,7 @@ namespace TenmoClient
 
         public Transfer RequestTransfer(Transfer transfer)
         {
-            RestRequest request = new RestRequest($"{API_URL}accounts/transfers/reqeust");
+            RestRequest request = new RestRequest($"{API_URL}accounts/transfers/request");
             request.AddJsonBody(transfer);
             IRestResponse<Transfer> response = client.Post<Transfer>(request);
             ErrorHandling(response);

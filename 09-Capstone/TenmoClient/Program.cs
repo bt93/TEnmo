@@ -138,6 +138,20 @@ namespace TenmoClient
                 else if (menuSelection == 3)
                 {
                     // View your pending requests
+                    List<Transfer> transfers = apiService.GetTransfers();
+
+                    foreach (Transfer transfer in transfers)
+                    {
+                        bool isReqeust = transfer.TransferType == TransferType.Request;
+                        bool isPending = transfer.TransferStatus == TransferStatus.Pending;
+                        bool isFromAccount = transfer.AccountFrom.UserId == UserService.GetUserId();
+
+                        if (isReqeust && isPending && isFromAccount)
+                        {
+                            Console.WriteLine(transfer.ReqeustTransfer());
+                        }
+                    }
+
                     Console.Write("Press Enter to continue.");
                     Console.ReadLine();
                 }
@@ -206,6 +220,63 @@ namespace TenmoClient
                 else if (menuSelection == 5)
                 {
                     // Request TE bucks
+                    try
+                    {
+                        Console.Clear();
+                        //Arrange
+                        int fromUserId = 0;
+                        decimal amount = -1;
+                        List<ReturnUser> users = apiService.GetAllUsers();
+                        Dictionary<int, ReturnUser> userMenu = new Dictionary<int, ReturnUser>();
+                        // making a dictionary for menu options and using int key for access to ReturnUsers
+                        int key = 1;
+                        foreach (ReturnUser user in users)
+                        {
+                            userMenu.Add(key, user);
+                            key++;
+                        }
+
+                        foreach (var option in userMenu)
+                        {
+                            Console.WriteLine($"{option.Key}: {option.Value.Username}");
+                        }
+
+                        // Choose a user and amount
+                        bool isValid = false;
+                        while (!isValid)
+                        {
+                            fromUserId = consoleService.PromptForUserID("transfer TE bucks to");
+                            if (userMenu.ContainsKey(fromUserId))
+                            {
+                                isValid = true;
+                            }
+                            else
+                            {
+                                Console.WriteLine("Please enter a valid user Id.");
+                            }
+                        }
+
+                        while (amount == -1)
+                        {
+                            amount = consoleService.PromtForAmount("How much would you like to request?");
+                        }
+                        if (amount == 0)
+                        {
+                            continue;
+                        }
+
+                        // Enter in transfer data
+                        int toUserId = UserService.GetUserId();
+                        Transfer newTransfer = new Transfer(toUserId, fromUserId, amount);
+                        // Send it
+                        newTransfer = apiService.RequestTransfer(newTransfer);
+                        Console.WriteLine(newTransfer.ToString());
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
+
                     Console.Write("Press Enter to continue.");
                     Console.ReadLine();
                 }
